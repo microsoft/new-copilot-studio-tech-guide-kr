@@ -1,0 +1,39 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+sample/chat-ui/
+
+# Copilot Studio agent clone scratch (pac CLI working copies)
+sample/store-solution/agents-cli/_*/
+
+# Playwright test-agent session artifacts
+.playwright/
+.playwright-cli/
+
+# env backups
+*.env.bak.*
+
+# Skill build artifacts (zips are regenerated from SKILL.md + scripts)
+sample/archive/store-solution/skills/*/*.zip
+deploy/.deploy-state.env

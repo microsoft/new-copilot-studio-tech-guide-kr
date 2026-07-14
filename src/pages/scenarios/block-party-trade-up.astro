@@ -1,0 +1,185 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/scenario.css';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="블록 파티 트레이드업 | Copilot Studio 기술 가이드">
+  <article class="scenario">
+    <div class="container">
+      <a href={base} class="back">&larr; 모든 시나리오</a>
+
+      <header class="scenario__header">
+        <h1>블록 파티 트레이드업</h1>
+        <p class="scenario__lead">
+          게임 리그 블록 파티가 열리는 주말, 행사 진행자 한 명에게 문제가 생겼습니다.
+          가장 필요한 순간에 열흘 전 구입한 콘솔이 고장 난 것입니다. 영수증을 들고 매장을
+          찾았지만 교환, 환불, 업그레이드 중 무엇을 선택할지 정하지 못했고 BlastPass도
+          해지하려 합니다. 매장 직원은 <strong>Store Associate Assistant</strong>를 사용해
+          이 모든 요청을 한 번의 대화로 해결합니다.
+        </p>
+        <div class="scenario__agent" style="--accent: var(--c-purple);">
+          <span class="scenario__agent-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg></span>
+          <span class="scenario__agent-text">
+            <span class="scenario__agent-label">이 시나리오를 테스트할 에이전트</span>
+            <span class="scenario__agent-name">Store Associate Assistant</span>
+          </span>
+        </div>
+      </header>
+
+      <section class="convo">
+        <h2>대화</h2>
+
+        <ol class="timeline">
+          <li class="tl-user">
+            <div class="tl-marker">1</div>
+            <div class="tl-content">
+              <div class="tl-label">매장 직원</div>
+              <div class="try-prompt">
+                <blockquote class="try-prompt__text">고객이 이번 주말 게임 리그 블록 파티를 여는데, 구입한 지 약 10일 된 주 콘솔이 고장 났습니다. 영수증은 가지고 있습니다. 재고가 있으면 교환하고, 없으면 환불받고 싶어 합니다. 방문한 김에 회원 ID MEGA-BLAST-1024인 BlastPass도 해지하려고 합니다. 전체 절차를 안내해 주세요.</blockquote>
+              </div>
+            </div>
+          </li>
+          <li class="tl-agent">
+            <div class="tl-marker">&#9670;</div>
+            <div class="tl-content">
+              <div class="tl-label">에이전트 &rarr; 연결된 에이전트 &rarr; 매장 직원</div>
+              <div class="tl-steps">
+                <p>오케스트레이터는 질문을 하나씩 던지는 대신 작업을 병렬로 전개해 한 번에 전체 상황을 파악합니다.</p>
+                <div class="tl-tool"><span class="tl-tool-name">get_membership</span>으로 MEGA-BLAST-1024 조회(Plus Extra, 미사용 8개월, 수수료 $10)</div>
+                <div class="tl-tool"><span class="tl-tool-name">Store Policy Agent &middot; search_policy</span>에 콘솔 결함 보증과 우발적 손상 비교 요청 &rarr; 판정 대신 <em>질문</em> 반환(먼저 결함 원인을 확인해야 한다는 규칙)</div>
+                <div class="tl-tool"><span class="tl-tool-name">Order Management MCP &middot; search_orders</span>가 회원 ID로 주문을 찾지 못해 <strong>고객 이름</strong>(Jordan Pixel)으로 다시 검색하고 결과 확인</div>
+                <div class="tl-tool"><span class="tl-tool-name">get_order</span> &rarr; ORD-10502: BlastBox Omega, $399.99, 끝자리 1024인 Visa 결제, 30일 결함 보증 기간 내</div>
+                <div class="tl-tool"><span class="tl-tool-name">Inventory &amp; Fulfillment Agent &middot; Warehouse MCP</span> check_stock(지역 기본 모델 0대), get_restock_date(약 4일), find_alternatives(MEGA Edition, $499.99, 재고 5대)</div>
+                <div class="tl-skill"><span class="tl-skill-name">prorated-refund-calculator</span>가 Python 실행 &rarr; $129.99 ÷ 12 × 8 &minus; $10 = <strong>$76.66</strong></div>
+                <p>기본 모델 재입고까지 <strong>약 4일 기다리기</strong>, 지금 <strong>MEGA Edition으로 업그레이드</strong>하기(BlastPass 환불금 $76.66을 $100 차액에 적용하면 <strong>실결제 $23.34</strong>), <strong>전액 환불</strong>의 세 가지 선택지와 BlastPass 해지 내역을 제시합니다. 마지막으로 모든 처리의 기준이 되는 한 가지를 묻습니다. <strong>"제조 결함인가요, 아니면 물리적 손상이나 침수인가요?"</strong></p>
+              </div>
+            </div>
+          </li>
+
+          <li class="tl-user">
+            <div class="tl-marker">2</div>
+            <div class="tl-content">
+              <div class="tl-label">매장 직원</div>
+              <div class="try-prompt">
+                <blockquote class="try-prompt__text">제조 결함입니다. 전원이 켜지지 않을 뿐 물리적 손상이나 침수는 없습니다.</blockquote>
+              </div>
+            </div>
+          </li>
+          <li class="tl-agent">
+            <div class="tl-marker">&#9670;</div>
+            <div class="tl-content">
+              <div class="tl-label">에이전트</div>
+              <div class="tl-steps">
+                <div class="tl-tool"><span class="tl-tool-name">Store Policy Agent</span>가 30일 이내 결함은 무료 보증 교환이며 재입고 수수료가 없음을 확인</div>
+                <p>원인이 확인되어 보증 교환 절차가 확정됩니다. 주문, 재고, $76.66 환불금은 첫 번째 단계에서 이미 조회했으므로 추가로 확인할 정보가 없습니다.</p>
+                <p>"확인되었습니다. 30일 이내 제조 결함이므로 수수료 없이 무료 보증 교환이 가능합니다. 기본 콘솔은 품절이라 재입고까지 약 4일 기다리거나, 오늘 MEGA Edition으로 업그레이드하거나, 전액 환불받을 수 있습니다. 업그레이드하면 <strong>$76.66</strong> 환불금이 $100 차액 대부분을 충당해 <strong>실결제액은 $23.34</strong>입니다. 고객은 어느 쪽을 선호하나요?"</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="tl-user">
+            <div class="tl-marker">3</div>
+            <div class="tl-content">
+              <div class="tl-label">매장 직원</div>
+              <div class="try-prompt">
+                <blockquote class="try-prompt__text">고객이 고민 중입니다. MEGA Edition은 마음에 들지만 기본 콘솔을 나흘 기다리는 대신 $100를 더 낼 가치가 있는지 확신하지 못합니다. 고객에게 설명할 내용을 알려 주세요.</blockquote>
+              </div>
+            </div>
+          </li>
+          <li class="tl-agent">
+            <div class="tl-marker">&#9670;</div>
+            <div class="tl-content">
+              <div class="tl-label">에이전트</div>
+              <div class="tl-steps">
+                <div class="tl-tool"><span class="tl-tool-name">Inventory &amp; Fulfillment Agent &middot; get_console_exclusives</span>에 mega 조회 &rarr; MEGA 전용 AAA 타이틀 3개</div>
+                <p><em>"블록 파티는 이번 주말이다. 나흘을 기다리면 행사에 맞출 수 없다. 결정 요인은 $100가 아니라 기본 콘솔에서 아예 실행되지 않는 세 게임이다."</em></p>
+                <p>"두 가지를 고려하면 결정하기 쉽습니다. 첫째는 <strong>시기</strong>입니다. 주말 전에 작동하는 콘솔을 받을 수 있는 선택지는 MEGA Edition뿐입니다. 둘째는 <strong>게임</strong>입니다. <em>MEGA Lizards from Outer Space</em>, <em>Galactic Tax Evader VII</em>, <em>Mecha-Granny: Knitpocalypse</em>는 모두 기본 콘솔에서 실행되지 않습니다. 여기에 $76.66 환불금을 업그레이드 비용에 바로 적용하므로 실제 차액도 크지 않습니다."</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="tl-user">
+            <div class="tl-marker">4</div>
+            <div class="tl-content">
+              <div class="tl-label">매장 직원</div>
+              <div class="try-prompt">
+                <blockquote class="try-prompt__text">진행해 주세요. MEGA Edition으로 보증 교환하고, BlastPass를 해지해 $76.66을 업그레이드 매장 크레딧으로 적용한 뒤 고객이 낼 금액을 알려 주세요. Triple BLAST Weekend 이후 BlastPoints 가치도 계산해 주세요. 그리고 정산서를 PDF로 만들어 주세요.</blockquote>
+              </div>
+            </div>
+          </li>
+          <li class="tl-agent">
+            <div class="tl-marker">&#9670;</div>
+            <div class="tl-content">
+              <div class="tl-label">에이전트 &rarr; 매장 직원</div>
+              <div class="tl-steps">
+                <div class="tl-tool"><span class="tl-tool-name">check_game_compatibility</span>로 세 타이틀 모두 MEGA Edition이 필요함을 확인</div>
+                <div class="tl-tool"><span class="tl-tool-name">Order Management MCP &middot; request_return</span>에 결함 콘솔 보증 교환 요청</div>
+                <div class="tl-tool"><span class="tl-tool-name">Membership MCP &middot; cancel_membership</span>으로 해지하고 환불금을 매장 크레딧으로 발급</div>
+                <div class="tl-skill"><span class="tl-skill-name">points-reconciliation</span>이 Python 실행 &rarr; 4,200 + 적립 18,000 &minus; 만료 800 = <strong>21,400포인트 &rarr; $105.00</strong></div>
+                <div class="tl-skill"><span class="tl-skill-name">slip-pdf-generator</span>가 reportlab 실행 &rarr; 정산 PDF</div>
+                <div class="tl-file"><span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span class="ticon-bb">&#129534;</span> <strong>blastbox_slip.pdf</strong> 반환</div>
+                <p>"결함 콘솔은 수수료 없이 $399.99로 크레딧 처리되었습니다. MEGA Edition은 $499.99이므로 업그레이드 차액은 $100.00입니다. BlastPass 해지로 매장 크레딧 $76.66이 발급되어 <strong>최종 결제액은 $23.34</strong>입니다. 주말 이후 BlastPoints는 <strong>21,400포인트</strong>로 $105.00 가치입니다. 이 중 $23.34을 사용하면 추가 결제 없이 교환할 수 있습니다."</p>
+              </div>
+            </div>
+          </li>
+        </ol>
+
+        <div class="result">
+          <span class="result__icon"><span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span class="ticon-bb">&#129534;</span></span>
+          <div>
+            <div class="result__label">정산</div>
+            <div class="result__value">업그레이드 $100 &minus; 크레딧 $76.66 = 최종 결제 $23.34 &middot; 21,400포인트 &rarr; $105 &middot; blastbox_slip.pdf</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scenario__section">
+        <h2>시연한 기능</h2>
+        <div class="value-grid">
+          <div class="value-card">
+            <h3>연결된 에이전트 2개와 하위 MCP 2개</h3>
+            <p>Policy는 결함을 <em>판정</em>하고 Inventory는 <em>재고와 업셀</em>을 담당하며, 상위 에이전트의 MCP 2개가 추가로 동작합니다. 오케스트레이션이 실제로 여러 전문가에게 작업을 분배하고 결과를 모읍니다.</p>
+          </div>
+          <div class="value-card">
+            <h3>실제 의사 결정을 돕는 업셀</h3>
+            <p>고객이 선택하지 못할 때 <code>get_console_exclusives</code>가 기본 콘솔에서 실행되지 않는 AAA 타이틀 3개와 주말 행사 전에 바로 받을 수 있다는 구체적인 설명을 직원에게 제공합니다.</p>
+          </div>
+          <div class="value-card">
+            <h3>모든 수치를 Python으로 계산</h3>
+            <p>에이전트는 MCP 결과를 스킬에 전달해 일할 환불금, 포인트, 정산 PDF의 정확한 수치를 계산합니다. 에이전트가 임의로 산술 계산하지 않습니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="scenario__section">
+        <h2>생성되는 결과물</h2>
+        <p class="gen-note">
+          매장 직원은 정산된 수치를 바탕으로 <code>slip-pdf-generator</code> 스킬(reportlab)이
+          실시간 생성한 정산서를 고객에게 전달합니다. 실제 에이전트 실행에서 만들어진 PDF를
+          다운로드해 고객이 받는 결과물을 확인할 수 있습니다.
+        </p>
+        <div class="files">
+          <a class="filecard filecard--download" href={`${base}files/blastbox_slip.pdf`} download>
+            <span class="filecard__icon"><span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span class="ticon-bb">&#129534;</span></span>
+            <div>
+              <strong>blastbox_slip.pdf</strong>
+              <span>reportlab &middot; 정산서 &middot; 교환 + 해지 + 계산</span>
+            </div>
+            <span class="filecard__dl">다운로드 &darr;</span>
+          </a>
+        </div>
+        <figure class="slip-preview">
+          <a href={`${base}files/blastbox_slip.pdf`} target="_blank" rel="noopener">
+            <img
+              src={`${base}img/blastbox_slip-preview.png`}
+              alt="BlastBox 반품 및 서비스 정산서. 결함 콘솔을 MEGA Edition으로 보증 교환하고 BlastPass 해지 환불금을 매장 크레딧으로 적용해 최종 결제액이 $23.34로 표시되어 있습니다."
+              loading="lazy"
+            />
+          </a>
+        </figure>
+      </section>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,233 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  capability: string;
+  href: string;
+  icon: string;
+  tier: string;          // "Warm-up" | "Store associate" | "Store manager"
+  accent: string;        // css color var name token: cyan | purple | pink | orange | green
+  pillars: string[];     // small chips, e.g. ["1 MCP", "1 skill", "PDF out"]
+  upcoming?: boolean;    // flag the scenario as not-yet-available
+}
+
+const { title, description, capability, href, icon, tier, accent, pillars, upcoming = false } = Astro.props;
+
+const accentMap: Record<string, string> = {
+  cyan: 'var(--c-primary)',
+  purple: 'var(--c-purple)',
+  pink: 'var(--c-pink)',
+  orange: 'var(--c-orange)',
+  green: 'var(--c-green)',
+};
+const accentColor = accentMap[accent] ?? accentMap.cyan;
+
+const icons: Record<string, string> = {
+  card: '<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/>',
+  package: '<path d="M16.5 9.4 7.5 4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+  ticket: '<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/>',
+  report: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+};
+const emojis: Record<string, string> = {
+  card: '🎟️',
+  package: '📦',
+  ticket: '🎟️',
+  report: '📉',
+};
+const iconPaths = icons[icon] ?? icons.card;
+const iconEmoji = emojis[icon] ?? emojis.card;
+---
+
+<a href={upcoming ? undefined : href} class:list={["card-wrapper", { "card-wrapper--upcoming": upcoming }]} aria-disabled={upcoming ? "true" : undefined} style={`--accent: ${accentColor};`}>
+  <div class="card">
+    <div class="card__art">
+      <span class="card__icon">
+        <span class="ticon-cat" set:html={`<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${iconPaths}</svg>`}></span>
+        <span class="ticon-bb">{iconEmoji}</span>
+      </span>
+      <span class="card__tier">{tier}</span>
+      {upcoming && <span class="card__upcoming">준비 중</span>}
+      <span class="card__scanline"></span>
+    </div>
+    <div class="card__body">
+      <span class="badge badge--primary card__cap">{capability}</span>
+      <h3 class="card__title">{title}</h3>
+      <p class="card__desc">{description}</p>
+      <div class="card__pillars">
+        {pillars.map((p) => <span class="pill">{p}</span>)}
+      </div>
+      {upcoming ? (
+        <span class="card__link card__link--soon">곧 공개</span>
+      ) : (
+        <span class="card__link">
+          시나리오 보기
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </span>
+      )}
+    </div>
+  </div>
+</a>
+
+<style>
+  .card-wrapper {
+    position: relative;
+    border-radius: var(--card-frame-radius);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: var(--card-frame-thickness);
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--accent), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    z-index: 1;
+  }
+  .card-wrapper:hover::before { opacity: 1; }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--card-frame-radius);
+    overflow: hidden;
+    transition: all 0.25s ease;
+    height: 100%;
+  }
+  .card-wrapper:hover .card {
+    border-color: transparent;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), 0 0 24px color-mix(in srgb, var(--accent) 22%, transparent);
+    transform: translateY(-3px);
+  }
+
+  .card__art {
+    position: relative;
+    aspect-ratio: 16 / 7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse 70% 90% at 50% 120%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%),
+      var(--c-bg-deep);
+    border-bottom: 1px solid var(--c-border-subtle);
+    overflow: hidden;
+  }
+  .card__icon {
+    color: var(--accent);
+    filter: drop-shadow(0 0 14px color-mix(in srgb, var(--accent) 55%, transparent));
+    z-index: 2;
+    display: inline-flex;
+  }
+  .card__icon svg { width: 34px; height: 34px; }
+  .card__icon .ticon-bb { font-size: 2.6rem; filter: none; }
+  .card__tier {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    padding: 3px 8px;
+    border-radius: 20px;
+    z-index: 2;
+  }
+  .card__scanline {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 3px);
+    z-index: 1;
+  }
+
+  .card__body {
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    flex: 1;
+  }
+  .card__cap { align-self: flex-start; }
+  .card__title {
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--c-text);
+    margin-top: 2px;
+  }
+  .card__desc {
+    font-size: 0.88rem;
+    color: var(--c-text-secondary);
+    line-height: 1.6;
+    flex: 1;
+  }
+  .card__pillars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    background: var(--c-surface-raised);
+    border: 1px solid var(--c-border-subtle);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: var(--space-sm);
+    transition: gap 0.2s ease;
+  }
+  .card-wrapper:hover .card__link { gap: 10px; }
+
+  /* Upcoming (not-yet-available) scenarios */
+  .card-wrapper--upcoming { cursor: default; }
+  .card-wrapper--upcoming:hover::before { opacity: 0; }
+  .card-wrapper--upcoming:hover .card {
+    border-color: var(--c-border);
+    box-shadow: none;
+    transform: none;
+  }
+  .card-wrapper--upcoming .card { opacity: 0.82; }
+  .card-wrapper--upcoming .card__upcoming {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-text-muted);
+    border: 1px solid var(--c-border);
+    background: var(--c-surface-raised);
+    padding: 3px 8px;
+    border-radius: 20px;
+    z-index: 2;
+  }
+  .card__link--soon { color: var(--c-text-muted); }
+  .card-wrapper--upcoming:hover .card__link--soon { gap: 6px; }
+</style>

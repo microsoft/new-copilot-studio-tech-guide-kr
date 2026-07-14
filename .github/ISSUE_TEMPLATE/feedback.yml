@@ -1,0 +1,49 @@
+name: 사이트 또는 샘플 문제/의견
+description: 한국어 사이트나 샘플 솔루션의 문제를 신고하거나 의견을 남깁니다
+title: "[사이트/샘플] "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **한국어 단계별 가이드 사이트** 또는 **샘플 솔루션**(가져오기, 에이전트, MCP 도구)에 관한 양식입니다.
+        최신 에이전트 기술 심층 분석 자료에 관한 내용은 **프레젠테이션 문제/의견** 양식을 사용하세요.
+  - type: dropdown
+    id: type
+    attributes:
+      label: 유형
+      description: 어떤 내용인가요?
+      options:
+        - 버그 또는 오작동
+        - 의견 또는 개선 제안
+        - 질문
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: 영역
+      description: 어느 영역과 관련되어 있나요?
+      options:
+        - 시나리오 단계별 가이드
+        - 채팅 UI
+        - 솔루션 가져오기/배포
+        - 커넥터/MCP 도구
+        - 문서/README
+        - 기타
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: 상세 내용
+      description: 문제나 의견을 설명해 주세요. 버그라면 재현 절차, 예상 결과, 실제 결과를 포함해 주세요.
+      placeholder: 내용을 입력하세요.
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: 페이지 URL(선택 사항)
+      description: 사이트의 특정 페이지와 관련된 경우 URL을 붙여 넣으세요.
+      placeholder: https://microsoft.github.io/new-copilot-studio-tech-guide-kr/...

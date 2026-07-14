@@ -1,0 +1,36 @@
+name: 프레젠테이션 문제/의견
+description: 최신 에이전트 기술 심층 분석 프레젠테이션의 문제를 신고하거나 의견을 남깁니다
+title: "[Copilot Studio 심층 분석 자료] "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **최신 에이전트 기술 심층 분석 자료**([aka.ms/CopilotStudioDeepDiveDeck](https://aka.ms/CopilotStudioDeepDiveDeck))에 관한 양식입니다.
+        한국어 단계별 가이드 사이트나 샘플 솔루션은 **사이트 또는 샘플 문제/의견** 양식을 사용하세요.
+  - type: dropdown
+    id: type
+    attributes:
+      label: 유형
+      description: 어떤 내용인가요?
+      options:
+        - 오류 또는 부정확한 내용
+        - 제안 또는 개선 사항
+        - 손상되었거나 오래된 콘텐츠
+        - 질문
+    validations:
+      required: true
+  - type: input
+    id: slide
+    attributes:
+      label: 슬라이드 또는 섹션
+      description: 관련된 슬라이드 번호나 섹션을 알려 주세요.
+      placeholder: 예: 슬라이드 12, 연결된 에이전트
+  - type: textarea
+    id: details
+    attributes:
+      label: 상세 내용
+      description: 문제나 의견을 설명해 주세요. 오류라면 잘못된 내용과 올바른 내용을 함께 알려 주세요.
+      placeholder: 내용을 입력하세요.
+    validations:
+      required: true

@@ -1,0 +1,570 @@
+---
+import Base from '../layouts/Base.astro';
+import ScenarioCard from '../components/ScenarioCard.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="Copilot Studio 기술 가이드">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <div class="hero__eyebrow">
+          <span class="hero__eyebrow-dot">&#9670;</span>
+          Copilot Studio &middot; 최신 환경
+        </div>
+        <h1 class="hero__title">
+          <span class="t-cat">새로운 <span class="hero__title-accent">Copilot Studio</span> 환경</span>
+          <span class="t-bb">BlastBox <span class="hero__title-omega">Omega</span></span>
+        </h1>
+        <p class="hero__tagline">
+          <span class="t-cat">Copilot Studio의 새로운 에이전트와 워크플로를 직접 따라 하는 기술 가이드.</span>
+          <span class="t-bb">에이전트가 운영하는 레트로 퓨처 게임 스토어.</span>
+        </p>
+        <p class="hero__subtitle">
+          <span class="t-cat">
+            Copilot Studio는 단일 챗봇에서 여러 에이전트가 협업하는 시스템으로 진화해
+            <strong>복잡한 다단계 작업을 수행하도록 새롭게 구축</strong>되었습니다. 이
+            <strong>CAT 팀 기술 가이드</strong>는 새로운 기반 위에서 엔터프라이즈급
+            시나리오를 만드는 방법을 설명합니다. <strong>연결된 에이전트</strong>,
+            <strong>MCP 서버</strong>, <strong>런타임 스킬</strong>,
+            <strong>생성 파일</strong>의 실전 패턴을 다루며, 각 패턴은 직접 배포하고
+            살펴볼 수 있는 완전한 실행형 참조 구현으로 제공됩니다.
+          </span>
+          <span class="t-bb">
+            Copilot Studio는 단일 챗봇에서 여러 에이전트가 협업하는 시스템으로 진화해
+            <strong>복잡한 다단계 작업을 수행하도록 새롭게 구축</strong>되었습니다.
+            BlastBox Omega는 완전한 실행형 참조 구현입니다. 상위 에이전트가
+            <strong>연결된 에이전트</strong>에 작업을 위임하고,
+            <strong>여러 MCP 서버</strong>를 호출하며, 런타임에 Python을 생성하고 실행하는
+            <strong>에이전트별 스킬</strong>을 구동해 실제 <strong>생성 파일</strong>을
+            반환합니다. 새로운 Copilot Studio의 <strong>에이전트와 워크플로</strong>를
+            아우르는 엔드투엔드 참조 시나리오입니다.
+          </span>
+        </p>
+        <div class="hero__actions">
+          <a href="#scenarios" class="btn btn--primary">시나리오 살펴보기</a>
+          <a href="https://github.com/microsoft/new-copilot-studio-tech-guide-kr/tree/main/sample/solution" class="btn btn--secondary">
+            샘플 받기
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="console">
+          <div class="console__header">
+            <span class="console__dot"></span>
+            <span class="console__dot"></span>
+            <span class="console__dot"></span>
+            <span class="console__title">store-associate-assistant</span>
+          </div>
+          <div class="console__body">
+            <div class="msg msg--user">구매 10일 만에 콘솔이 고장 났습니다. 교환 또는 환불하고 BlastPass도 해지하려고 합니다. 절차를 안내해 주세요.</div>
+            <div class="delegate">&rarr; <strong>Store Policy Agent</strong>에 결함 판정 요청</div>
+            <div class="tool"><span class="tool__io">MCP</span> search_policy <span class="tool__badge">보증</span></div>
+            <div class="delegate">&rarr; <strong>Inventory &amp; Fulfillment Agent</strong>에 재고 확인 요청</div>
+            <div class="tool"><span class="tool__io">MCP</span> check_stock <span class="tool__badge">MEGA 재고 있음</span></div>
+            <div class="skill"><span class="skill__io">SKILL</span> prorated-refund-calculator <span class="skill__py">python</span></div>
+            <div class="msg msg--bot">MEGA로 보증 교환 &middot; 환불금 $76.66 적용 &middot; <strong>최종 결제액 $23.34</strong>.</div>
+            <div class="file"><span class="file__icon"><span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span><span class="ticon-bb">&#128196;</span></span> blastbox_slip.pdf <span class="file__meta">생성됨</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pillars -->
+  <section class="pillars">
+    <div class="container">
+      <p class="section-label">핵심 기능</p>
+      <h2>새 에이전트 환경을 구성하는 요소</h2>
+      <p class="pillars__intro">모든 시나리오는 Copilot Studio 최신 에이전트 환경의 동일한 핵심 기능으로 구성됩니다. 고급 시나리오일수록 더 많은 기능을 한 번에 조합합니다.</p>
+
+      <div class="pillars__grid">
+        <div class="pillar">
+          <div class="pillar__icon" style="--g: var(--c-primary);">
+            <span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+            <span class="ticon-bb" style="font-size:1.4rem;">&#129309;</span>
+          </div>
+          <h3>연결된 에이전트</h3>
+          <p>상위 오케스트레이터가 전문 하위 에이전트에 작업을 위임하고, 각 답변을 하나의 대화로 엮습니다.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar__icon" style="--g: var(--c-purple);">
+            <span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 6 4 7 6 5"/><polyline points="3 12 4 13 6 11"/><polyline points="3 18 4 19 6 17"/></svg></span>
+            <span class="ticon-bb" style="font-size:1.4rem;">&#128221;</span>
+          </div>
+          <h3>AI 스킬</h3>
+          <p>에이전트가 작업을 완료할 때 따르는 재사용 가능한 절차로, 실행 중 스크립트와 템플릿 같은 자산을 참조할 수 있습니다.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar__icon" style="--g: var(--c-red);">
+            <span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
+            <span class="ticon-bb" style="font-size:1.4rem;">&#128013;</span>
+          </div>
+          <h3>에이전트 샌드박스</h3>
+          <p>에이전트가 <em>런타임에 코드를 생성하고 실행</em>해 계산, 변환, 분석을 수행하며 텍스트 응답을 넘어 실제 연산까지 처리합니다.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar__icon" style="--g: var(--c-orange);">
+            <span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+            <span class="ticon-bb" style="font-size:1.4rem;">&#128196;</span>
+          </div>
+          <h3>파일 생성</h3>
+          <p>에이전트가 사용자가 다운로드하고 전달할 수 있는 PDF, 이미지, 문서 등 실제 결과물을 만듭니다.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar__icon" style="--g: var(--c-green);">
+            <span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
+            <span class="ticon-bb" style="font-size:1.4rem;">&#128260;</span>
+          </div>
+          <h3>적응형 오케스트레이션</h3>
+          <p>에이전트가 대화 흐름에 따라 계획을 동적으로 세우고, 단계가 모호하면 확인 질문을 하며, 요청이 바뀌면 계획을 수정합니다.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar__icon" style="--g: var(--c-pink);">
+            <span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 5v6c0 1.66-4 3-9 3s-9-1.34-9-3V5"/><path d="M21 11v6c0 1.66-4 3-9 3s-9-1.34-9-3v-6"/></svg></span>
+            <span class="ticon-bb" style="font-size:1.4rem;">&#129504;</span>
+          </div>
+          <h3>메모리</h3>
+          <p>대화 전반에 컨텍스트와 이전 결과가 유지되어, 에이전트가 매번 처음부터 시작하지 않고 이미 파악한 내용을 활용합니다.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar__icon" style="--g: var(--c-teal);">
+            <span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+            <span class="ticon-bb" style="font-size:1.4rem;">&#128218;</span>
+          </div>
+          <h3>지식</h3>
+          <p>연결된 데이터 원본, 문서, 사이트, 구조화된 데이터를 근거로 답변합니다.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar__icon" style="--g: var(--c-indigo);">
+            <span class="ticon-cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></span>
+            <span class="ticon-bb" style="font-size:1.4rem;">&#128736;&#65039;</span>
+          </div>
+          <h3>도구/MCP 서버</h3>
+          <p>에이전트가 MCP 서버와 커넥터를 통해 외부 시스템과 API를 도구로 호출하여 기본 기능의 범위를 확장합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scenarios -->
+  <section class="scenarios" id="scenarios">
+    <div class="container">
+      <p class="section-label">단계별 가이드</p>
+      <h2>시나리오</h2>
+      <p class="scenarios__intro">빠른 셀프 서비스 작업부터 완전한 멀티 에이전트 대표 사례까지, 핵심 구성 요소가 실제로 동작하는 엔드투엔드 대화를 살펴봅니다. 새로운 시나리오도 계속 추가됩니다.</p>
+
+      <div class="scenarios__grid">
+        <ScenarioCard
+          title="셀프 서비스 카드 재발급"
+          capability="셀프 서비스"
+          tier="Returns &amp; Service Assistant"
+          accent="green"
+          icon="card"
+          description="회원이 BlastPass 카드를 분실했습니다. 에이전트가 본인을 확인하고 카드를 재발급한 뒤, 등급 색상이 적용된 새 멤버십 카드를 만듭니다. Membership MCP + 카드 스킬."
+          href={`${base}scenarios/self-serve-card-reissue`}
+          pillars={["Membership MCP", "카드 스킬", "PNG 생성", "본인 확인"]}
+        />
+        <ScenarioCard
+          title="블록 파티 트레이드업"
+          capability="매장 직원"
+          tier="Store Associate Assistant"
+          accent="purple"
+          icon="package"
+          description="고장 난 콘솔의 트레이드업을 처리합니다. 보증 판정, 재고 확인, 환불금 일할 계산, 포인트 적용, 잔액 정산까지 이어집니다. 연결된 에이전트 2개, MCP 4개, 연계 스킬, 정산 PDF."
+          href={`${base}scenarios/block-party-trade-up`}
+          pillars={["MCP 4개", "연결된 에이전트 2개", "연계 스킬", "정산 PDF"]}
+        />
+        <ScenarioCard
+          title="분기 말 가격 인하 검토"
+          capability="매장 관리자"
+          tier="Merch Insights Assistant"
+          accent="orange"
+          icon="report"
+          description="관리자가 매장 전체 현황에서 카테고리와 개별 SKU의 주간 추이까지 단계적으로 분석하고, 정책에 근거한 분기 말 할인안을 정합니다. 연결된 에이전트 3개, 실시간 차트, 추천안, 관리자 PDF."
+          href={`${base}scenarios/markdown-review`}
+          pillars={["연결된 에이전트 3개", "실시간 차트", "정책 기반 추천", "관리자 PDF"]}
+          upcoming={true}
+        />
+    </div>
+  </section>
+
+  <!-- Get started -->
+  <section class="cta" id="get-started">
+    <div class="container">
+      <div class="cta__layout">
+        <div class="cta__text">
+          <p class="section-label">시작하기</p>
+          <h2>스토어 구축하기</h2>
+          <p class="cta__desc">솔루션을 가져오고 MCP 연결을 만든 뒤, 정책 문서를 추가하고 에이전트를 게시해 준비된 프롬프트를 실행합니다. 모든 구성 요소는 Power Platform 안에서 실행되므로 별도 서버나 호스팅할 코드가 필요하지 않습니다.</p>
+          <div class="cta__actions">
+            <a href="https://github.com/microsoft/new-copilot-studio-tech-guide-kr/tree/main/sample/solution" class="btn btn--primary">
+              샘플 받기
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="https://github.com/microsoft/new-copilot-studio-tech-guide-kr" class="btn btn--secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              GitHub 저장소
+            </a>
+          </div>
+        </div>
+        <div class="cta__steps">
+          <div class="cta__step"><span class="cta__num">1</span><div><strong>솔루션 가져오기</strong><p>Power Apps에서 관리형 zip 파일 업로드</p></div></div>
+          <div class="cta__step"><span class="cta__num">2</span><div><strong>모든 사용자 지정 게시</strong><p>인라인 커넥터 코드를 APIM에 배포</p></div></div>
+          <div class="cta__step"><span class="cta__num">3</span><div><strong>MCP 연결 만들기</strong><p>네 개 커넥터에서 각각 만들기 선택</p></div></div>
+          <div class="cta__step"><span class="cta__num">4</span><div><strong>게시하고 실행하기</strong><p>에이전트 네 개를 게시한 뒤 두 시나리오 실행</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section class="resources" id="resources">
+    <div class="container">
+      <p class="section-label">더 알아보기</p>
+      <h2>리소스</h2>
+      <p class="resources__intro">새로운 Copilot Studio 에이전트 환경을 이해하고 확장하는 데 도움이 되는 참고 자료입니다. 최신 에이전트 기술 심층 분석과 연계 오픈 소스 플러그인을 확인할 수 있습니다.</p>
+
+      <div class="resources__grid">
+        <div class="resource resource--deck" style="--accent: var(--c-purple);">
+          <div class="resource__head">
+            <span class="resource__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+            </span>
+            <span class="resource__kind">프레젠테이션 &middot; PPTX</span>
+          </div>
+          <h3 class="resource__title">최신 에이전트 기술 심층 분석</h3>
+          <p class="resource__desc">새로운 Copilot Studio 에이전트의 아키텍처와 연결된 에이전트, MCP, 스킬, 오케스트레이션, 파일 생성을 슬라이드별로 설명합니다.</p>
+          <div class="resource__actions">
+            <a href="https://aka.ms/CopilotStudioDeepDiveDeck" class="resource__link resource__link--stretch" target="_blank" rel="noopener">
+              프레젠테이션 열기
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </a>
+            <a href="https://github.com/microsoft/new-copilot-studio-tech-guide-kr/issues/new?template=deck-feedback.yml" class="resource__feedback" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              의견 보내기
+            </a>
+          </div>
+        </div>
+
+        <a href="https://aka.ms/CopilotStudioPlugin" class="resource resource--repo" style="--accent: var(--c-primary);" target="_blank" rel="noopener">
+          <div class="resource__head">
+            <span class="resource__icon">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </span>
+            <span class="resource__kind">저장소 &middot; GitHub</span>
+          </div>
+          <h3 class="resource__title">Copilot Studio Plugin</h3>
+          <p class="resource__desc">기존 Copilot Studio 에이전트를 최신 환경으로 마이그레이션하거나 새로운 최신 에이전트를 처음부터 만드는 AI 코딩 에이전트용 오픈 소스 플러그인입니다.</p>
+          <span class="resource__link">
+            GitHub에서 보기
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ── Hero ── */
+  .hero { position: relative; padding: var(--space-4xl) 0 var(--space-3xl); overflow: hidden; }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: var(--space-3xl);
+    align-items: center;
+  }
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-text-secondary);
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .hero__eyebrow-dot { color: var(--c-primary); text-shadow: var(--glow-accent); }
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 6.5vw, 4.4rem);
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    margin-top: var(--space-lg);
+    text-shadow: var(--glow-hero);
+  }
+  .hero__title-omega {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero__title-accent {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero__tagline {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--c-primary);
+    margin-top: var(--space-md);
+    letter-spacing: 0.01em;
+  }
+  .hero__subtitle {
+    margin-top: var(--space-lg);
+    font-size: 1.02rem;
+    color: var(--c-text-secondary);
+    line-height: 1.7;
+    max-width: 38rem;
+  }
+  .hero__subtitle strong { color: var(--c-text); font-weight: 600; }
+  .hero__actions { display: flex; gap: var(--space-md); margin-top: var(--space-xl); flex-wrap: wrap; }
+
+  /* ── Hero console ── */
+  .console {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-console);
+    overflow: hidden;
+  }
+  .console__header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 14px;
+    background: var(--c-bg-deep);
+    border-bottom: 1px solid var(--c-border-subtle);
+  }
+  .console__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c-border); }
+  .console__dot:nth-child(1) { background: #ff5470; }
+  .console__dot:nth-child(2) { background: #ffb020; }
+  .console__dot:nth-child(3) { background: #41f5a8; }
+  .console__title {
+    margin-left: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--c-text-muted);
+  }
+  .console__body { padding: var(--space-lg); display: flex; flex-direction: column; gap: 9px; }
+  .msg { font-size: 0.84rem; line-height: 1.5; padding: 9px 12px; border-radius: 10px; max-width: 92%; }
+  .msg--user { align-self: flex-end; background: var(--c-primary-light); border: 1px solid var(--border-primary); color: var(--c-text); }
+  .msg--bot { align-self: flex-start; background: var(--c-surface-raised); border: 1px solid var(--c-border-subtle); color: var(--c-text-secondary); }
+  .delegate { font-size: 0.74rem; color: var(--c-purple); font-family: var(--font-mono); padding-left: 2px; }
+  .delegate strong { color: var(--c-text); }
+  .tool, .skill, .file {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-size: 0.74rem;
+    padding: 6px 10px; border-radius: 8px;
+    border: 1px solid var(--c-border-subtle); background: var(--c-bg-deep);
+    color: var(--c-text-secondary);
+  }
+  .tool__io, .skill__io, .file__icon {
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em;
+    padding: 2px 6px; border-radius: 5px;
+  }
+  .tool__io { background: var(--tint-primary); color: var(--c-primary); }
+  .skill__io { background: var(--tint-pink); color: var(--c-pink); }
+  .tool__badge, .skill__py, .file__meta { margin-left: auto; color: var(--c-text-muted); font-size: 0.68rem; }
+  .skill__py { color: var(--c-pink); }
+  .file { border-color: var(--border-orange); }
+  .file__icon { background: var(--tint-orange); color: var(--c-orange); display: inline-flex; padding: 3px; }
+  .file__icon svg { width: 13px; height: 13px; }
+
+  /* ── Pillars ── */
+  .pillars { padding: var(--space-2xl) 0; }
+  .pillars__intro { color: var(--c-text-secondary); margin-top: var(--space-sm); max-width: 44rem; }
+  .pillars__grid {
+    margin-top: var(--space-2xl);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: var(--space-lg);
+  }
+  .pillar {
+    padding: var(--space-lg);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border-subtle);
+    border-radius: var(--radius-md);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .pillar:hover { border-color: var(--c-border); transform: translateY(-2px); }
+  .pillar__icon {
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--g);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--g) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--g) 35%, transparent);
+    margin-bottom: var(--space-md);
+  }
+  .pillar__icon svg { width: 22px; height: 22px; }
+  .pillar h3 { font-size: 1rem; margin-bottom: var(--space-xs); }
+  .pillar p { font-size: 0.86rem; color: var(--c-text-secondary); line-height: 1.6; }
+  .pillar em { color: var(--c-text); font-style: normal; font-weight: 600; }
+
+  /* ── Scenarios ── */
+  .scenarios { padding: var(--space-2xl) 0; scroll-margin-top: 70px; }
+  .scenarios__intro { color: var(--c-text-secondary); margin-top: var(--space-sm); max-width: 44rem; }
+  .scenarios__grid {
+    margin-top: var(--space-2xl);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  /* ── Resources ── */
+  .resources { padding: var(--space-2xl) 0; scroll-margin-top: 70px; }
+  .resources__intro { color: var(--c-text-secondary); margin-top: var(--space-sm); max-width: 44rem; }
+  .resources__grid {
+    margin-top: var(--space-2xl);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    max-width: 780px;
+  }
+  .resource {
+    --accent: var(--c-primary);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--card-frame-radius);
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .resource:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16), 0 0 22px color-mix(in srgb, var(--accent) 16%, transparent);
+    transform: translateY(-3px);
+  }
+  .resource__head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+  .resource__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent);
+  }
+  .resource__icon svg { width: 20px; height: 20px; }
+  .resource__kind {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .resource__title {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--c-text);
+    margin-top: 2px;
+  }
+  .resource__desc {
+    font-size: 0.84rem;
+    color: var(--c-text-secondary);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .resource__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    margin-top: var(--space-xs);
+  }
+  .resource__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    transition: gap 0.2s ease;
+  }
+  .resource:hover .resource__link { gap: 10px; }
+  .resource__link--stretch::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .resource__feedback {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    transition: color 0.15s ease;
+  }
+  .resource__feedback:hover { color: var(--accent); }
+  .resource__feedback svg { opacity: 0.7; }
+
+  @media (max-width: 640px) {
+    .resources__grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── CTA ── */
+  .cta { padding: var(--space-2xl) 0; scroll-margin-top: 70px; }
+  .cta__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3xl);
+    align-items: center;
+    padding: var(--space-2xl);
+    background: var(--gradient-brand-soft), var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-xl);
+  }
+  .cta__desc { margin-top: var(--space-sm); color: var(--c-text-secondary); line-height: 1.7; }
+  .cta__actions { display: flex; gap: var(--space-md); margin-top: var(--space-lg); flex-wrap: wrap; }
+  .cta__steps { display: flex; flex-direction: column; gap: var(--space-md); }
+  .cta__step { display: flex; align-items: flex-start; gap: var(--space-md); }
+  .cta__num {
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 0.82rem;
+    color: var(--c-bg-deep);
+    background: var(--c-primary);
+    border-radius: 8px;
+  }
+  .cta__step strong { font-size: 0.92rem; }
+  .cta__step p { font-size: 0.82rem; color: var(--c-text-muted); }
+
+  @media (max-width: 860px) {
+    .hero__inner { grid-template-columns: 1fr; gap: var(--space-2xl); }
+    .hero__visual { order: -1; }
+    .cta__layout { grid-template-columns: 1fr; gap: var(--space-xl); }
+  }
+</style>
